@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Aparcamientos de Madrid</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link href="{% static '1.css' %}"" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+
+	<div id="cabecera">
+		<div class="banner"></div>
+		<div class="formulario">
+			<form>
+				Usuario:<br><input type="text" name="usuario"></br>
+				Contraseña:<br><input type="password" name="contraseña"></br>
+				<br><input type="submit" value="Entrar">			
+			</form>
+		</div>
+		<h1>Aparcamientos de Madrid</h1>
+	</div>
+
+	<div id="menu">
+
+			<ul>
+			<li><a href="/">Inicio</a></li>
+			<li><a href="4556">Aparcamientos</a></li>
+			<li><a href="777">Fichero XML</a></li>	
+			<li><a href="/about">About</a></li>
+			</ul>
+	</div>
+
+	<div id="content">
+	<p>
+		Esta web pertenece al proyecto de la asignatura de Sistemas y Aplicaciones Telemáticas del Grado de Sistemas de Telecomunicación, impartido en la Universidad Rey Juan Carlos.
+	</p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p>
+		Esta realizado por Sergio Gómez León.
+	</p>
+
+	</div>
+	<div id="footer">
+		<i>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid{enlace XML}</i>
+	</div>
+</body>
+</html>

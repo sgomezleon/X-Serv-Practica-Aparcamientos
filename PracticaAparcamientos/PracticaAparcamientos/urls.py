@@ -18,7 +18,9 @@ from django.contrib import admin
 from Aparcamientos import views
 
 urlpatterns = [
+	url(r'^about/$', views.about, name='Pagina con la informacion'),
+	url(r'^login$', views.entrar_usuario),
 	url(r'^$', views.home, name='Pagina principal del sitio'),
-	url(r'^about/', views.about, name='Pagina con la informacion'),
+
     url(r'^admin/', include(admin.site.urls)),
 ]
