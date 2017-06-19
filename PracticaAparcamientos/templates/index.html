@@ -12,40 +12,57 @@
 	<div id="cabecera">
 		<div class="banner"></div>
 		<div class="formulario">
-
+			{% if request.user.is_authenticated %}
+				<h4>Bienvenido {{user.username}}</h4> 
+				<form action="/mypage">
+					<input type="submit" value="Mi pagina">
+				</form>		
+				<form action="/logout">
+					<input type="submit" value="Salir">
+				</form>		
+							
+			{% else %}
 			<form action="/login" method="POST">
-				
+				{% csrf_token %}
 				Usuario:<br><input type="text" name="usuario"></br>
 				Contraseña:<br><input type="password" name="contraseña"></br>
 				<br><input type="submit" value="Entrar">			
-
 			</form>
+			{% endif %}
 
 		</div>
 		<h1>Aparcamientos de Madrid</h1>
 	</div>
 
 	<div id="menu">
-
 			<ul>
 			<li><a href="/">Inicio</a></li>
-			<li><a href="4556">Aparcamientos</a></li>
-			<li><a href="777">Fichero XML</a></li>	
+			<li><a href="/aparcamientos">Aparcamientos</a></li>
+			<li><a href="/XML">Fichero XML</a></li>	
 			<li><a href="/about">About</a></li>
 			</ul>
 	</div>
+
 	<div id="menu_lateral">   <!--Menu de paginas personales-->
-		<h2>Menú de páginas personales</h2>
-		<p><a href="Pagina de Pepito"> Pagina de Pepito</a></p>
-		<p><a href="Pagina de Juanito"> Pagina de Juanito</a></p>
+	{% if users %}
+	<h2>Menú de páginas personales</h2>
+		{% for user in users %}
+			<li>
+			<p><a href="/{{user.username}}"> Pagina de {{user.username}}</a></p>
+			</li>				
+		{% endfor%}
+	{% endif %}
+
+	{{blockcontent}}
+	{{endblock}}
+
 	</div>
 
-	<div id="content">
-	<p>
-		Aqui irá el contenido de la página principal
-	</p>
-
+	<div id = "blockcontent">
+		{% block content %}
+		{% endblock %}		
 	</div>
+
 	<div id="footer">
 		<i>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid</i>
 		<ul><i><a href="https://goo.gl/SiJcIL">Fichero XML del Ayuntamiento de Madrid.</a></i></ul>

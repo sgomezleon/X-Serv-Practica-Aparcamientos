@@ -1,21 +1,25 @@
 body {
 background-color:#172029;
 }
+
 #container {			
 background-color:#171D29;
 margn: 5px 3px 0px 0px; 
 }
+
 #banner {
 height: 124px;
 background-color: #FEFEDC;
 background-image: url(picks/2.jpg);
 }
+
 .logobox{
 float:left;
 width: 163px;
 height: 122px;
 background-image: url(picks/5.jpg);
 }
+
 .lbox{
 width: 150px;
 height: 100%;
@@ -23,6 +27,7 @@ background-color:#171D29;
 padding: 0px 1px 1px 1px;
 color:#fff;
 }
+
 .textbox{
 height: 30px;
 margin-left: 172px;
@@ -32,6 +37,7 @@ color:#fff;
 padding: 4px 0px 0px 0px; 
 font-family:"verdana", arial, sans-serif,  times;
 }
+
 .navbox{
 float: right;
 border: 0px solid #000;
@@ -40,12 +46,14 @@ height: 30px;
 margn: 3px 3px 0px 0px; 
 background-color:#;
 }
+
 #content {
 margin-top: 0px;
 margin-left: 164px;
 height: 100%;		
 background-color:#fff;
 }
+
 blockquote{
 border: 2px solid #CECFC6;
 padding: 9px;
@@ -145,6 +153,11 @@ padding-top: 3px;
 border-bottom: 1px solid #000;
 font-family:" sans-serif", verdana, arial, times , engravers mt bold;
 }
+h4{
+font-size: 1.0em;
+color: white;
+font-family:"times", verdana, arial, sans-serif,  engravers mt bold;
+}
 #footer {
 clear: both;
 text-align: center;
@@ -153,4 +166,11 @@ padding: 5px;
 color:#fff;			
 background-color: #172029;
 background-image: url(picks/2.jpg);
+}
+
+.error{
+float:center;
+width: 163px;
+height: 122px;
+background-image: url(ocupado.jpg);
 }

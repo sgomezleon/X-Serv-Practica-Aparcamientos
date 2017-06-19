@@ -12,12 +12,9 @@ class Aparcamiento(models.Model):
 	Tipo_Via		=		models.TextField(default="")
 	Num 			=		models.IntegerField(default="0") 			
 	Localidad		=		models.TextField(default="")
-	Provincia		=		models.TextField(default="")
 	Codigo_Postal 	=		models.IntegerField(default="0")
 	Barrio			=		models.TextField(default="")
 	Distrito		=		models.TextField(default="")
-	Coord_X			=		models.TextField(default="")
-	Coord_Y			=		models.TextField(default="")
 	Latitud			=		models.TextField(default="")
 	Longitud		=		models.TextField(default="")
 
