@@ -95,22 +95,8 @@ width: 100%;
 border: 0px solid #625e00;
 background-color: #;
 }
-#menu ul li{
-display: inline;
-}
-#menu ul li a{
-float: left;
-color:#000;
-padding: 5px 5px;
-text-decoration: none;
-}
-#menu ul li a:visited{
-color: blue;
-}
-#menu ul li a:hover{
-color: white;
-background-color: #172029;
-}
+
+
 p {
 background-color: #fff;
 padding: 0px 0px 2px 5px;
@@ -121,6 +107,7 @@ font-size: 16px;
 font-family: arial;
 color: #000;
 }
+
 #left p {
 background-color: #fff;
 padding: 0px 4px 2px 4px;

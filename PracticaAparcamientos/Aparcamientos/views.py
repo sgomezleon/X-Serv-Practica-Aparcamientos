@@ -35,9 +35,7 @@ def home(request):
 										Latitud=parking["LATITUD"],
 										Longitud=parking["LONGITUD"])
 				
-#				print(parking_new)
 			except KeyError:
-				print("KEY ERROR")
 				continue
 			except ValueError:
 				continue
@@ -54,7 +52,7 @@ def home(request):
 		users_list += [user]
 	
 	template = get_template('inicio.html')	
-	context = RequestContext(request,{"users" : users_list, 'aparcamientos':park})
+	context = RequestContext(request,{"users" : users_list, 'aparcamientos':aparcamientos})
 	return HttpResponse(template.render(context))
 
 def about(request):
@@ -83,12 +81,12 @@ def mypage (request):
 		username = request.user.username
 		return HttpResponseRedirect('/' + username)
 
-@csrf_exempt
 def aparcamientos(request):
-	aparcamientos = Aparcamiento.objects.all()
+
+	Listado_Aparcamientos = Aparcamiento.objects.all()
 
 	template = get_template('aparcamientos.html')
-	context = RequestContext(request, {'aparcamientos' : aparcamientos})
+	context = RequestContext(request, {'Listado_Aparcamientos' : Listado_Aparcamientos})
 	return HttpResponse(template.render(context))
 
 def desconexion(request):

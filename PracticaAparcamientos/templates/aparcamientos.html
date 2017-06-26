@@ -2,12 +2,16 @@
 {% extends "index.html" %}
 {% block content %}
 
-<h1> APARCAMIENTOS DE MADRID </h1>
-	<ul>
-	{% for parking in park%}
-		<a href="aparcamientos/{{parking.id}}">{{aparcamiento.nombre}}</a>
-	{%endfor%}
-	</ul>
+	<div id=lista>
+		<h1> APARCAMIENTOS DE MADRID</h1>
+		
+			{% for parking in Listado_Aparcamientos %}
+			<ul><a href=aparcamientos/{{parking.Enlace}}>{{parking.Nombre}}</a>	
+			</ul>
+			{% endfor %}
+		
+
+	<div>
 
 
 {% endblock %}
