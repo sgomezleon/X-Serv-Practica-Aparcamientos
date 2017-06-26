@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+{% extends "index.html" %}
+{% block content %}
+
+<h1> APARCAMIENTOS DE MADRID </h1>
+	<ul>
+	{% for parking in park%}
+		<a href="aparcamientos/{{parking.id}}">{{aparcamiento.nombre}}</a>
+	{%endfor%}
+	</ul>
+
+
+{% endblock %}

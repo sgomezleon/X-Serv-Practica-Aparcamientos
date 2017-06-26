@@ -12,29 +12,40 @@ from Aparcamientos.models import Aparcamiento
 # Create your views here.
 
 def home(request):
-	#Creamos la lista con los aparcamientos
-	aparcamientos = Aparcamiento.objects.all()
 
+#Creamos la lista con los aparcamientos
+	aparcamientos = Aparcamiento.objects.all()
+	park = []
 	if not aparcamientos:
-		aparcamientos = ParsearAparcamientos()	#Utilizamos el parse para crear la lista
-		for parking in aparcamientos:	
+		park = ParsearAparcamientos()	#Utilizamos el parse para crear la lista
+		for parking in park:
 		# En cada campo del models metemos lo que hemos parseado
-			parking_new = Aparcamiento(Nombre			=	parking["NOMBRE"], 
-										Descripcion		=	parking["DESCRIPCION"],
-										Enlace			=	parking["CONTENT-URL"],
-										Accesibilidad	=	parking["ACCESIBILIDAD"],
-										Nombre_Via		=	parking["NOMBRE-VIA"],
-										Tipo_Via		=	parking["TIPO-VIA"],
-										Num				=	parking["NUM"],
-										Localidad		=	parking["LOCALIDAD"],
-										Codigo_Postal	=	parking["CODIGO-POSTAL"],
-										Barrio			=	parking["BARRIO"],
-										Distrito		=	parking["DISTRITO"],
-										Latitud			=	parking["LATITUD"],
-										Longitud		=	parking["LONGITUD"])
+			try:
+				parking_new = Aparcamiento(Nombre=parking["NOMBRE"], 
+										Descripcion=parking["DESCRIPCION"],
+										Accesibilidad=parking["ACCESIBILIDAD"],
+										Enlace=parking["CONTENT-URL"],
+										Nombre_Via=parking["NOMBRE-VIA"],
+										Clase_Via=parking["CLASE-VIAL"],
+										Numero=parking["NUM"],
+										Localidad=parking["LOCALIDAD"],
+										Codigo_Postal=parking["CODIGO-POSTAL"],
+										Barrio=parking["BARRIO"],
+										Distrito=parking["DISTRITO"],
+										Latitud=parking["LATITUD"],
+										Longitud=parking["LONGITUD"])
+				
+#				print(parking_new)
+			except KeyError:
+				print("KEY ERROR")
+				continue
+			except ValueError:
+				continue
 
 			parking_new.save()
-	
+
+
+
 	#Creamos la lista con los usuarios registrados
 	users_list = []
 	users = User.objects.all()
@@ -43,7 +54,7 @@ def home(request):
 		users_list += [user]
 	
 	template = get_template('inicio.html')	
-	context = RequestContext(request,{"users" : users_list})
+	context = RequestContext(request,{"users" : users_list, 'aparcamientos':park})
 	return HttpResponse(template.render(context))
 
 def about(request):
@@ -67,11 +78,18 @@ def entrar_usuario(request):
 			template = get_template("error.html")
 			return HttpResponse(template.render())
 @csrf_exempt
-def mypage (request,username):
-	pagina_usuario = User.object.get(username=username)	
-#	try:
-#		Parking_Selected = 	
-	return HttpResponseRedirect('/' + username)
+def mypage (request):
+	if request.user.is_authenticated():
+		username = request.user.username
+		return HttpResponseRedirect('/' + username)
+
+@csrf_exempt
+def aparcamientos(request):
+	aparcamientos = Aparcamiento.objects.all()
+
+	template = get_template('aparcamientos.html')
+	context = RequestContext(request, {'aparcamientos' : aparcamientos})
+	return HttpResponse(template.render(context))
 
 def desconexion(request):
 	logout(request)
