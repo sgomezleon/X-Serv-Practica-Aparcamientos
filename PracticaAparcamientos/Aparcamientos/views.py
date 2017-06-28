@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from Aparcamientos import models
 from Aparcamientos.parse import ParsearAparcamientos
 from Aparcamientos.models import Aparcamiento,ComentarioAparcamiento,Seleccionado
-from django.db.models import Count
 
 # Create your views here.
 
@@ -44,16 +43,20 @@ def home(request):
 
 	Listado = []
 	AparcamientosComentados = Aparcamiento.objects.order_by('-Cantidad')
-	MasComentados ="<li>"
+	MasComentados ="<h2>APARCAMIENTOS MÁS COMENTADOS: </h2>"
+
 	k = 0
 	for Listado in AparcamientosComentados:
 		print(Listado.Nombre + " " + str(Listado.Cantidad))
 		if Listado.Cantidad >0:
-			MasComentados += Listado.Nombre +". Puntuacion: " + str(Listado.Puntuacion)			
+			MasComentados += "<p><ul><b><strong>" + Listado.Nombre + "</strong></b></ul>"  + "<strong> DIRECCIÓN: </strong>" + Listado.Clase_Via + " " + Listado.Nombre_Via +" " + Listado.Numero
+			MasComentados += "<a href= 'aparcamientos/"+ str(Listado.id) + "'> Visitar aparcamiento</a></p>"	
+				
 			k = k +1
 			if k == 5:
 				break
-	MasComentados += "</li>"
+	MasComentados += ""
+	
 	print(MasComentados)
 
 
@@ -65,8 +68,9 @@ def home(request):
 	for user in users:
 		users_list += [user]
 	
-	template = get_template('inicio.html')	
-	context = RequestContext(request,{"users" : users_list, 'AparcamientosComentados':MasComentados})
+	template = get_template('index.html')	
+
+	context = RequestContext(request,{"users" : users_list, 'content':MasComentados})
 	return HttpResponse(template.render(context))
 
 def about(request):
