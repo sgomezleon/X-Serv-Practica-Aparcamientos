@@ -17,11 +17,17 @@ class Aparcamiento(models.Model):
 	Distrito		=		models.TextField(default="")
 	Latitud			=		models.TextField(default="")
 	Longitud		=		models.TextField(default="")
+	Puntuacion		= 		models.IntegerField(default="0")
+	Cantidad 		=		models.IntegerField(default = "0")
 
-class Comentario(models.Model):
+class ComentarioAparcamiento(models.Model):
 	Usuario			=		models.ForeignKey(User)		
-	Comentario		= 		models.TextField(default="")
+	Comment			= 	models.TextField(default="")
 	Fecha			=		models.DateField(auto_now_add="True")
-	Aparcamiento	=		models.ForeignKey('Aparcamiento')
+	AparcamientoComentado	=		models.ForeignKey('Aparcamiento')
 
-	
+class Seleccionado(models.Model):
+	Usuario 	= models.ForeignKey(User)
+	Fecha 		= models.DateField(auto_now_add="True")
+	Elegido 	= models.ForeignKey("Aparcamiento")
+	Favorito 	= models.IntegerField(default="0")

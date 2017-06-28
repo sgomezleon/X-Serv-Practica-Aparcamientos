@@ -7,15 +7,15 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from Aparcamientos import models
 from Aparcamientos.parse import ParsearAparcamientos
-from Aparcamientos.models import Aparcamiento
+from Aparcamientos.models import Aparcamiento,ComentarioAparcamiento,Seleccionado
 
 # Create your views here.
 
 def home(request):
 
 #Creamos la lista con los aparcamientos
-	aparcamientos = Aparcamiento.objects.all()
 	park = []
+	aparcamientos = Aparcamiento.objects.all()
 	if not aparcamientos:
 		park = ParsearAparcamientos()	#Utilizamos el parse para crear la lista
 		for parking in park:
@@ -41,7 +41,7 @@ def home(request):
 				continue
 
 			parking_new.save()
-
+			park += [parking_new]
 
 
 	#Creamos la lista con los usuarios registrados
@@ -82,12 +82,74 @@ def mypage (request):
 		return HttpResponseRedirect('/' + username)
 
 def aparcamientos(request):
-
-	Listado_Aparcamientos = Aparcamiento.objects.all()
+	
+	if request.method == "GET":
+		Listado_Aparcamientos = Aparcamiento.objects.all()
+	elif request.method == "POST":
+		district = request.POST.get('district')
+		if district != "None":
+			Listado_Aparcamientos = Aparcamiento.objects.filter(Distrito=district)
+		else:
+			Listado_Aparcamientos = Aparcamiento.objects.all()
 
 	template = get_template('aparcamientos.html')
 	context = RequestContext(request, {'Listado_Aparcamientos' : Listado_Aparcamientos})
 	return HttpResponse(template.render(context))
+
+def accesibles(request):
+	if request.method == "GET":
+		Parking_Accesible = Aparcamiento.objects.filter(Accesibilidad = '1')
+
+	template = get_template('accesibles.html')
+	context = RequestContext(request, {'Parking_Accesible': Parking_Accesible})
+	return HttpResponse(template.render(context))
+
+
+
+def pag_aparcamiento(request, identif):
+	aparcamiento = Aparcamiento.objects.get(id = identif)
+	comments = ComentarioAparcamiento.objects.filter(AparcamientoComentado = aparcamiento)
+	seleccionado = Seleccionado(Elegido=aparcamiento)
+	fav = seleccionado.Favorito
+	puntuacion = aparcamiento.Puntuacion
+	Cantidad = aparcamiento.Cantidad
+	if request.method == "POST":
+		comment= request.POST.get("comentarios")
+		Elegido = request.POST.get("aparcamiento")
+		Liked = request.POST.get("liked")
+		Repetido = False
+		if Liked == str(1):
+			NuevaPuntuacion = puntuacion + 1
+			aparcamiento.Puntuacion = NuevaPuntuacion
+			aparcamiento.save()
+		if comment != "Escribe tu comentario: " and comment != None:
+			Usuario = User.objects.get(username=request.user.username)
+			UsuariosComentado = ComentarioAparcamiento.objects.filter(AparcamientoComentado=aparcamiento)
+			NuevaCantidad = Cantidad + 1
+			aparcamiento.Cantidad = NuevaCantidad
+			aparcamiento.save()
+			for UsuarioComentado in UsuariosComentado:
+				if UsuarioComentado.Usuario == Usuario:
+					Repetido = True
+			if Repetido:
+				ComentarioModificado = ComentarioAparcamiento.objects.get(AparcamientoComentado=aparcamiento, Usuario=Usuario)
+				ComentarioModificado.Comment = comment
+				ComentarioModificado.save()
+			else:
+				NuevoComentario = ComentarioAparcamiento(Comment=comment, AparcamientoComentado = aparcamiento, Usuario = Usuario)
+				NuevoComentario.save()
+			if Elegido != None and fav != 1:
+				fav = 1
+				userchosen = User.objects.get(username=request.user.username)
+				NuevoElegido = Seleccionado(Elegido=aparcamiento, Usuario = userchosen, favorito=favorito)
+				NuevoElegido.save()
+	Puntuacion = aparcamiento.Puntuacion
+	template = get_template('pag_aparcamiento.html')
+	context = RequestContext(request, {'aparcamiento': aparcamiento, 'fav':fav, 'comments':comments, 'puntuacion':puntuacion})
+	return HttpResponse(template.render(context))
+
+
+
 
 def desconexion(request):
 	logout(request)

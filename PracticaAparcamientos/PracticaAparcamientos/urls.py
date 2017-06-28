@@ -22,6 +22,8 @@ urlpatterns = [
 	url(r'^login$', views.entrar_usuario),
 	url(r'^logout$', views.desconexion),
 	url(r'^aparcamientos$', views.aparcamientos),
+	url(r'^aparcamientos/(\d+)', views.pag_aparcamiento),
+	url(r'^accesibles$', views.accesibles),
 	url(r'^mypage$',views.mypage),
 	url(r'^$', views.home, name='Pagina principal del sitio'),
     url(r'^admin/', include(admin.site.urls)),

@@ -1,14 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
 	
-	<div id=lista>
+	<div id=blockcontent>
 		<h1> LISTA DE LOS APARCAMIENTOS </h1>
-		<ul>
-			{% for parking in Lista_Aparcamientos %}
-			<li><a href={{parking.Enlace}}>{{parking.Nombre}}</a>	
-				<p>{{parking.descripcion}}</p>
-			{% endfor %}
-		</ul>
-
-	<div>
+	</div>
 {% endblock %}
