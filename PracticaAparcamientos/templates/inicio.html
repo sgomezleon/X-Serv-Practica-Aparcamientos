@@ -1,7 +1,24 @@
 {% extends "index.html" %}
 {% block content %}
 	
+<div>
 	<div id=blockcontent>
-		<h1> LISTA DE LOS APARCAMIENTOS </h1>
+		<h3> LISTA DE LOS APARCAMIENTOS POR COMENTARIOS</h3>
+        {%for aparcamiento in AparcamientosComentados%}
+            <a href={{aparcamiento.Enlace}} ><strong>{{aparcamiento.Nombre}}</strong></a>
+        {%empty%}
+        <h2>No hay</h2>
+        {% endfor%}
 	</div>
+
+	
+	<div id=blockcontent>
+	<h3> LISTA DE LOS APARCAMIENTOS POR PUNTUACION</h3>
+        {%for park in AparcamientosComentados%}
+            <a href={{park.Enlace}} ><strong>{{park.Nombre}}</strong></a>
+        {%empty%}
+        <h2>No hay puntuaciones </h2>
+        {% endfor%}
+	</div>
+
 {% endblock %}

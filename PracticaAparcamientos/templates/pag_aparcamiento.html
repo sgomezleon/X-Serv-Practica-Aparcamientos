@@ -1,0 +1,64 @@
+<!-- Pagina de un aparcamiento -->
+
+{% extends "index.html" %}
+{% block content %}
+
+  <h1> {{aparcamiento.Nombre}} </h1>
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<h3>Puntuación: {{puntuacion}} </h3>
+		<input type="hidden" name="liked" value="1">
+		<input type="submit" value="Me gusta"/>
+	</form>
+	
+	{% csrf_token %}
+	{% if user.is_authenticated  %}
+		<form action="" method="POST">
+			{% csrf_token %}
+			<h3>Añadir a mi pagina</h3>
+			<input type="hidden" name="aparcamiento" value="{{aparcamiento.Nombre}}">
+			<input type="submit" value="Añadir"/>
+		</form>
+	{% endif %}
+
+	<div id = "content">
+		<ul> <strong>Enlace</strong>		: <a href= "{{aparcamiento.Enlace}}"> {{aparcamiento.Enlace}}</a>	</ul>
+		<ul> <strong>Descripcion</strong>	: {{aparcamiento.Descripcion}}	</ul>
+		<ul> <strong>Accesibilidad</strong> : {{aparcamiento.Accesibilidad}} </ul>
+		<ul> <strong>Clase Via</strong>		: {{aparcamiento.Clase_Via}}</ul>
+		<ul> <strong>Nombre Via</strong>	: {{aparcamiento.Nombre_Via}}</ul>
+		<ul> <strong>Numero</strong>		: {{aparcamiento.Numero}}</ul>
+		<ul> <strong>Localidad</strong>		: {{aparcamiento.Localidad}}</ul>
+		<ul> <strong>Codigo Postal</strong> : {{aparcamiento.Codigo_Postal}}</ul>
+		<ul> <strong>Barrio</strong>		: {{aparcamiento.Barrio}}</ul>
+		<ul> <strong>Distrito</strong>		: {{aparcamiento.Distrito}}</ul>
+		<ul> <strong>Latitud</strong>		: {{aparcamiento.Latitud}}</ul>
+		<ul> <strong>Longitud</strong>		: {{aparcamiento.Longitud}}</ul>
+	</div>
+
+	<h2> COMENTARIOS </h2>
+	<div id = "content">
+		<ul>
+		{% for comment in comments %}
+			<p><br>{{comment.Comment}}</br><br><strong>Usuario:</strong> {{comment.Usuario}} <strong>Fecha:</strong> {{comment.Fecha}}<br>
+		{% endfor %}
+		</ul>
+
+		{% if  not user.is_authenticated %}
+			<p>No puedes dejar comentarios si no estas logeado.<strong> <a href="/">Log in</a> </strong></p>
+		{% endif %}
+
+		{% if user.is_authenticated %}
+			<form action="" method="POST">
+			<br></br>
+				<h2>Añade un comentario:</h2>
+				<textarea name="comentarios" rows="5" cols="90">Escribe tu comentario.</textarea>
+				{% csrf_token %}
+				<input type="submit" value="Submit">
+			</form>
+		{% endif %}>
+	</div>
+
+	
+{% endblock%}

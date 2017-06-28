@@ -31,3 +31,9 @@ class Seleccionado(models.Model):
 	Fecha 		= models.DateField(auto_now_add="True")
 	Elegido 	= models.ForeignKey("Aparcamiento")
 	Favorito 	= models.IntegerField(default="0")
+
+class CSS(models.Model):
+	Usuario = models.ForeignKey(User)
+	Titulo = models.TextField(default="Mi pagina")
+	Color = models.CharField(default="", max_length=32)
+	Tamano = models.IntegerField(default=15)

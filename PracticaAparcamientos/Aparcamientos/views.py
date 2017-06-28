@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from Aparcamientos import models
 from Aparcamientos.parse import ParsearAparcamientos
 from Aparcamientos.models import Aparcamiento,ComentarioAparcamiento,Seleccionado
+from django.db.models import Count
 
 # Create your views here.
 
@@ -34,14 +35,27 @@ def home(request):
 										Distrito=parking["DISTRITO"],
 										Latitud=parking["LATITUD"],
 										Longitud=parking["LONGITUD"])
-				
 			except KeyError:
 				continue
 			except ValueError:
 				continue
 
 			parking_new.save()
-			park += [parking_new]
+
+	Listado = []
+	AparcamientosComentados = Aparcamiento.objects.order_by('-Cantidad')
+	MasComentados ="<li>"
+	k = 0
+	for Listado in AparcamientosComentados:
+		print(Listado.Nombre + " " + str(Listado.Cantidad))
+		if Listado.Cantidad >0:
+			MasComentados += Listado.Nombre +". Puntuacion: " + str(Listado.Puntuacion)			
+			k = k +1
+			if k == 5:
+				break
+	MasComentados += "</li>"
+	print(MasComentados)
+
 
 
 	#Creamos la lista con los usuarios registrados
@@ -52,7 +66,7 @@ def home(request):
 		users_list += [user]
 	
 	template = get_template('inicio.html')	
-	context = RequestContext(request,{"users" : users_list, 'aparcamientos':aparcamientos})
+	context = RequestContext(request,{"users" : users_list, 'AparcamientosComentados':MasComentados})
 	return HttpResponse(template.render(context))
 
 def about(request):
@@ -112,7 +126,7 @@ def pag_aparcamiento(request, identif):
 	seleccionado = Seleccionado(Elegido=aparcamiento)
 	fav = seleccionado.Favorito
 	puntuacion = aparcamiento.Puntuacion
-	Cantidad = aparcamiento.Cantidad
+	cantidad = aparcamiento.Cantidad
 	if request.method == "POST":
 		comment= request.POST.get("comentarios")
 		Elegido = request.POST.get("aparcamiento")
@@ -125,8 +139,8 @@ def pag_aparcamiento(request, identif):
 		if comment != "Escribe tu comentario: " and comment != None:
 			Usuario = User.objects.get(username=request.user.username)
 			UsuariosComentado = ComentarioAparcamiento.objects.filter(AparcamientoComentado=aparcamiento)
-			NuevaCantidad = Cantidad + 1
-			aparcamiento.Cantidad = NuevaCantidad
+			NuevaCantidad = cantidad + 1
+			aparcamiento.cantidad = NuevaCantidad
 			aparcamiento.save()
 			for UsuarioComentado in UsuariosComentado:
 				if UsuarioComentado.Usuario == Usuario:

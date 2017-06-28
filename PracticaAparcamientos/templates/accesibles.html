@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block content %}
+	<h1> Aparcamientos accesibles </h1>
+	<div id = "content">
+		<ul>
+		{% for parking in Parking_Accesible %}
+		<li><a href="aparcamientos/{{parking.id}}" > <strong> {{parking.Nombre}} </strong></a>
+			Distrito <strong> {{parking.Distrito}} </strong>
+        {% endfor %}
+		</ul>
+	</div>
+{% endblock %}
+
