@@ -1,5 +1,6 @@
 body {
-background-color:#8B8BDA;
+background-color:{{color}};
+
 }
 #container {			
 background-color:#171D29;
@@ -11,9 +12,6 @@ background-color: #FEFEDC;
 background-image: url(picks/2.jpg);
 }
 
-#titulo{
-	display: block;
-}
 .banner{
 float:left;
 width: 400px;
@@ -34,7 +32,7 @@ color:#fff;
 height: 30px;
 margin-left: 172px;
 text-align: center;
-font-size: 1.0em;
+font-size: {{size}}px;
 color:#fff;
 padding: 4px 0px 0px 0px; 
 font-family:"verdana", arial, sans-serif,  times;

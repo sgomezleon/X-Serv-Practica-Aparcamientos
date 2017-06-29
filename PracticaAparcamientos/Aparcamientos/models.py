@@ -40,5 +40,5 @@ class Seleccionado(models.Model):
 class CSS(models.Model):
 	Usuario = models.ForeignKey(User)
 	Titulo = models.TextField(default="Mi pagina")
-	Color = models.CharField(default="", max_length=32)
+	Color = models.CharField(default="blue", max_length=32)
 	Tamano = models.IntegerField(default=15)

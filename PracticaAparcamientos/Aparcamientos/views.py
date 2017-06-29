@@ -102,6 +102,9 @@ def entrar_usuario(request):
 		else:
 			template = get_template("error.html")
 			return HttpResponse(template.render())
+
+
+
 def registrar_usuario(request):
 
 	if request.method == "GET":
@@ -111,8 +114,12 @@ def registrar_usuario(request):
 	if request.method == "POST":
 		username = request.POST.get('username')
 		password = make_password(request.POST.get('password'))
+
 		UsuarioNuevo = User(username=username,password=password)
 		UsuarioNuevo.save()
+		user = User.objects.get(username=username)
+		config = CSS(Usuario=user)
+		config.save()
 		return HttpResponseRedirect("/")
 	else:
 		template = get_template("error.hmtl")
@@ -132,29 +139,34 @@ def XML(request, userXML):
 
 
 
-def mypage(request, username):
+def mypage(request, user):
 	if request.method =="POST":
 		TituloNuevo = request.POST.get("TituloNuevo")
 		FondoNuevo = request.POST.get("Fondo")
 		NuevoTamano = request.POST.get("TamanoLetra")
+		print(FondoNuevo)
 		user = User.objects.get(username=user)
-		newConfig = CSSConfiguration.objects.all() 
+		print(user)
+		newConfig = CSS.objects.all()
+		print(newConfig)
+		#newConfig = CSS.objects.get(Usuario=user) 
 		try:
-			newConfig = CSS.objects.get(user=user)
+			newConfig = CSS.objects.get(Usuario=user)
+			print(newConfig)
 		except CSS.DoesNotExist:
-			newConfig.user = userPage
+			newConfig.Usuario = user
 			newConfig.update()
-		if TituloNuevo != "Titulo de la pagina." and TituloNuevo != newConfig.Titulo and TituloNuevo != None:
+		if TituloNuevo != "Titulo de la pagina." and TituloNuevo != None:
 			newConfig.Titulo = TituloNuevo
 			newConfig.save()
 		if FondoNuevo != None and FondoNuevo != newConfig.Color:
 			newConfig.Color = FondoNuevo
 			newConfig.save()
-		if NuevoTamano != None and NuevoTamano != newConfig.size:
+		if NuevoTamano != None and NuevoTamano != newConfig.Tamano:
 			newConfig.Tamano = NuevoTamano
 			newConfig.save()
 
-	userPage = User.objects.get(username=username)
+	userPage = User.objects.get(username=user)
 	userConfig = CSS.objects.all()
 	try:
 		userConfig = CSS.objects.get(Usuario=userPage)
@@ -248,7 +260,7 @@ def css(request):
         user = User.objects.get(username=request.user.username)
         userConfig = CSS.objects.get(user=user)
         color = userConfig.Color
-        size = userConfig.size
+        size = userConfig.Tamano
     template = get_template("static/1.css")
     context = RequestContext(request, {"color": color, "size": size})
     return HttpResponse(template.render(context), content_type="text/css")
