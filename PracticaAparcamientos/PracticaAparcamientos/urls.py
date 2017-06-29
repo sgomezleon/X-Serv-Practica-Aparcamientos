@@ -18,14 +18,15 @@ from django.contrib import admin
 from Aparcamientos import views
 
 urlpatterns = [
-	url(r'^about/$', views.about, name='Pagina con la informacion'),
+	url(r'^about/$', views.about),
 	url(r'^login$', views.entrar_usuario),
 	url(r'^logout$', views.desconexion),
+	url(r'^$', views.home),
 	url(r'^registro$', views.registrar_usuario),
 	url(r'^aparcamientos$', views.aparcamientos),
 	url(r'^aparcamientos/(\d+)', views.pag_aparcamiento),
 	url(r'^accesibles$', views.accesibles),
-	url(r'^$', views.home, name='Pagina principal del sitio'),
+	url(r'^1.css$', views.css),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^(.*)/XML$', views.XML),
 	url(r'^(.*)$',views.mypage),

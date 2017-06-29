@@ -51,12 +51,12 @@ def home(request):
 
 
 
-	MasPuntuados ="<h2>APARCAMIENTOS MÁS PUNTUADOS: </h2>"
+	MasPuntuados ="<h2>APARCAMIENTOS MAS PUNTUADOS: </h2>"
 
 	k = 0
 	for Listado in AparcamientosPuntuados:
 		if Listado.Puntuacion >0:
-			MasPuntuados += "<p><ul><b><strong>" + Listado.Nombre + "</strong></b></ul>"  + "<strong> DIRECCIÓN: </strong>" + Listado.Clase_Via + " " + Listado.Nombre_Via +", Nº " + Listado.Numero + ". <strong> PUNTUACIÓN: </strong>" + str(Listado.Puntuacion)
+			MasPuntuados += "<p><ul><b><strong>" + Listado.Nombre + "</strong></b></ul>"  + "<strong> DIRECCION: </strong>" + Listado.Clase_Via + " " + Listado.Nombre_Via +", N " + Listado.Numero + ". <strong> PUNTUACION: </strong>" + str(Listado.Puntuacion)
 			MasPuntuados += "<a href= 'aparcamientos/"+ str(Listado.id) + "'> Visitar aparcamiento</a></p>"	
 			k = k +1
 			if k == 5:
@@ -72,7 +72,7 @@ def home(request):
 	
 	template = get_template('index.html')	
 
-	context = RequestContext(request,{"users" : users_list, 'content':MasPuntuados})
+	context = RequestContext(request,{"users" : users_list, 'content': MasPuntuados})
 	return HttpResponse(template.render(context))
 
 
@@ -92,9 +92,9 @@ def about(request):
 def entrar_usuario(request):
 	if request.method == "POST":
 		usuario = request.POST.get("usuario")
-		contraseña = request.POST.get("contraseña")
+		contrasena = request.POST.get("contrasena")
 
-		user = authenticate(username = usuario, password = contraseña)
+		user = authenticate(username = usuario, password = contrasena)
 
 		if user is not None:
 			login(request,user)
@@ -254,16 +254,17 @@ def pag_aparcamiento(request, identif):
 
 
 def css(request):
-    color = "#D5CAD3"
-    size = 12
-    if request.user.is_authenticated():
-        user = User.objects.get(username=request.user.username)
-        userConfig = CSS.objects.get(user=user)
-        color = userConfig.Color
-        size = userConfig.Tamano
-    template = get_template("static/1.css")
-    context = RequestContext(request, {"color": color, "size": size})
-    return HttpResponse(template.render(context), content_type="text/css")
+	color = '7EA2E1'
+	size = 10
+	if request.user.is_authenticated():
+		user = User.objects.get(username=request.user.username)
+		userConfig = CSS.objects.get(Usuario=user)
+		color = userConfig.Color
+		size = userConfig.Tamano
+	template = get_template("picks/1.css")
+	print('miau')
+	context = RequestContext(request, {"color": color, "size": size})
+	return HttpResponse(template.render(context), content_type="text/css")
 
 
 # DESCONEXION
