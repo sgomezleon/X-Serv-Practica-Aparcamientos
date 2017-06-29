@@ -4,13 +4,18 @@ from django.template.loader import get_template
 from django.template import Context, RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout, authenticate
+from django.utils.html import strip_tags
+from django.contrib.auth.hashers import make_password
+
 from django.contrib.auth.models import User
 from Aparcamientos import models
 from Aparcamientos.parse import ParsearAparcamientos
-from Aparcamientos.models import Aparcamiento,ComentarioAparcamiento,Seleccionado
+from Aparcamientos.models import Aparcamiento,ComentarioAparcamiento,Seleccionado, CSS
 
 # Create your views here.
 
+
+#PAGINA PRINCIPAL DE LA WEB
 def home(request):
 
 #Creamos la lista con los aparcamientos
@@ -42,24 +47,21 @@ def home(request):
 			parking_new.save()
 
 	Listado = []
-	AparcamientosComentados = Aparcamiento.objects.order_by('-Cantidad')
-	MasComentados ="<h2>APARCAMIENTOS MÁS COMENTADOS: </h2>"
+	AparcamientosPuntuados = Aparcamiento.objects.order_by('-Puntuacion')
+
+
+
+	MasPuntuados ="<h2>APARCAMIENTOS MÁS PUNTUADOS: </h2>"
 
 	k = 0
-	for Listado in AparcamientosComentados:
-		print(Listado.Nombre + " " + str(Listado.Cantidad))
-		if Listado.Cantidad >0:
-			MasComentados += "<p><ul><b><strong>" + Listado.Nombre + "</strong></b></ul>"  + "<strong> DIRECCIÓN: </strong>" + Listado.Clase_Via + " " + Listado.Nombre_Via +" " + Listado.Numero
-			MasComentados += "<a href= 'aparcamientos/"+ str(Listado.id) + "'> Visitar aparcamiento</a></p>"	
-				
+	for Listado in AparcamientosPuntuados:
+		if Listado.Puntuacion >0:
+			MasPuntuados += "<p><ul><b><strong>" + Listado.Nombre + "</strong></b></ul>"  + "<strong> DIRECCIÓN: </strong>" + Listado.Clase_Via + " " + Listado.Nombre_Via +", Nº " + Listado.Numero + ". <strong> PUNTUACIÓN: </strong>" + str(Listado.Puntuacion)
+			MasPuntuados += "<a href= 'aparcamientos/"+ str(Listado.id) + "'> Visitar aparcamiento</a></p>"	
 			k = k +1
 			if k == 5:
 				break
-	MasComentados += ""
-	
-	print(MasComentados)
-
-
+	MasPuntuados += ""
 
 	#Creamos la lista con los usuarios registrados
 	users_list = []
@@ -70,15 +72,22 @@ def home(request):
 	
 	template = get_template('index.html')	
 
-	context = RequestContext(request,{"users" : users_list, 'content':MasComentados})
+	context = RequestContext(request,{"users" : users_list, 'content':MasPuntuados})
 	return HttpResponse(template.render(context))
 
+
+
+#PAGINA "ABOUT" CON INFORMACION DE LA PAGINA
 def about(request):
 
 	template= get_template('about.html')
 	context = RequestContext(request)
 	return HttpResponse(template.render(context))
 
+
+
+
+# INGRESAMOS EL USUARIO REGISTRADO PREVIAMENTE
 @csrf_exempt
 def entrar_usuario(request):
 	if request.method == "POST":
@@ -93,12 +102,79 @@ def entrar_usuario(request):
 		else:
 			template = get_template("error.html")
 			return HttpResponse(template.render())
-@csrf_exempt
-def mypage (request):
-	if request.user.is_authenticated():
-		username = request.user.username
-		return HttpResponseRedirect('/' + username)
+def registrar_usuario(request):
 
+	if request.method == "GET":
+		template = get_template("registro.html")
+		context = RequestContext(request, {})
+		return HttpResponse(template.render(context))
+	if request.method == "POST":
+		username = request.POST.get('username')
+		password = make_password(request.POST.get('password'))
+		UsuarioNuevo = User(username=username,password=password)
+		UsuarioNuevo.save()
+		return HttpResponseRedirect("/")
+	else:
+		template = get_template("error.hmtl")
+		return HttpResponseNotFound(template.render())
+
+
+
+def XML(request, userXML):
+	ListadoParking = []
+	user = User.objects.get(username = userXML)
+	AparcamientoFavorito = Seleccionado.objects.filter(Usuario=user)
+	for fav in AparcamientoFavorito:
+		ListadoParking += [fav.Elegido]
+	context = RequestContext(request, {"ListadoParking" : ListadoParking})
+	template = get_template("XML.xml")
+	return HttpResponse(template.render(context), content_type = "text/xml")
+
+
+
+def mypage(request, username):
+	if request.method =="POST":
+		TituloNuevo = request.POST.get("TituloNuevo")
+		FondoNuevo = request.POST.get("Fondo")
+		NuevoTamano = request.POST.get("TamanoLetra")
+		user = User.objects.get(username=user)
+		newConfig = CSSConfiguration.objects.all() 
+		try:
+			newConfig = CSS.objects.get(user=user)
+		except CSS.DoesNotExist:
+			newConfig.user = userPage
+			newConfig.update()
+		if TituloNuevo != "Titulo de la pagina." and TituloNuevo != newConfig.Titulo and TituloNuevo != None:
+			newConfig.Titulo = TituloNuevo
+			newConfig.save()
+		if FondoNuevo != None and FondoNuevo != newConfig.Color:
+			newConfig.Color = FondoNuevo
+			newConfig.save()
+		if NuevoTamano != None and NuevoTamano != newConfig.size:
+			newConfig.Tamano = NuevoTamano
+			newConfig.save()
+
+	userPage = User.objects.get(username=username)
+	userConfig = CSS.objects.all()
+	try:
+		userConfig = CSS.objects.get(Usuario=userPage)
+	except CSS.DoesNotExist:
+		userConfig.user = userPage
+		userConfig.update()
+
+	AparcamientoElegido = Seleccionado.objects.filter(Usuario=userPage)
+	ListadoAparcamientos = []
+	for fav in AparcamientoElegido:
+		ListadoAparcamientos += [fav.Elegido]
+
+
+	template = get_template("mypage.html")
+	context = RequestContext(request, {"ListadoAparcamientos" : ListadoAparcamientos, "userPage" : userPage, "userConfig" : userConfig})
+	return HttpResponse(template.render(context))
+
+
+
+#PAGINA CON TODOS LOS APARCAMIENTOS 
 def aparcamientos(request):
 	
 	if request.method == "GET":
@@ -123,20 +199,19 @@ def accesibles(request):
 	return HttpResponse(template.render(context))
 
 
-
+#PAGINA INDIVIDUAL DE CADA APARCAMIENTO
 def pag_aparcamiento(request, identif):
 	aparcamiento = Aparcamiento.objects.get(id = identif)
 	comments = ComentarioAparcamiento.objects.filter(AparcamientoComentado = aparcamiento)
 	seleccionado = Seleccionado(Elegido=aparcamiento)
-	fav = seleccionado.Favorito
 	puntuacion = aparcamiento.Puntuacion
 	cantidad = aparcamiento.Cantidad
 	if request.method == "POST":
 		comment= request.POST.get("comentarios")
-		Elegido = request.POST.get("aparcamiento")
+		elegido = request.POST.get("aparcamiento")
 		Liked = request.POST.get("liked")
 		Repetido = False
-		if Liked == str(1):
+		if Liked:
 			NuevaPuntuacion = puntuacion + 1
 			aparcamiento.Puntuacion = NuevaPuntuacion
 			aparcamiento.save()
@@ -156,19 +231,30 @@ def pag_aparcamiento(request, identif):
 			else:
 				NuevoComentario = ComentarioAparcamiento(Comment=comment, AparcamientoComentado = aparcamiento, Usuario = Usuario)
 				NuevoComentario.save()
-			if Elegido != None and fav != 1:
-				fav = 1
-				userchosen = User.objects.get(username=request.user.username)
-				NuevoElegido = Seleccionado(Elegido=aparcamiento, Usuario = userchosen, favorito=favorito)
-				NuevoElegido.save()
+		if elegido != None :
+			userchosen = User.objects.get(username=request.user.username)
+			NuevoElegido = Seleccionado(Elegido=aparcamiento, Usuario = userchosen)
+			NuevoElegido.save()
 	Puntuacion = aparcamiento.Puntuacion
 	template = get_template('pag_aparcamiento.html')
-	context = RequestContext(request, {'aparcamiento': aparcamiento, 'fav':fav, 'comments':comments, 'puntuacion':puntuacion})
+	context = RequestContext(request, {'aparcamiento': aparcamiento, 'seleccionado':seleccionado, 'comments':comments, 'puntuacion':puntuacion})
 	return HttpResponse(template.render(context))
 
 
+def css(request):
+    color = "#D5CAD3"
+    size = 12
+    if request.user.is_authenticated():
+        user = User.objects.get(username=request.user.username)
+        userConfig = CSS.objects.get(user=user)
+        color = userConfig.Color
+        size = userConfig.size
+    template = get_template("static/1.css")
+    context = RequestContext(request, {"color": color, "size": size})
+    return HttpResponse(template.render(context), content_type="text/css")
 
 
+# DESCONEXION
 def desconexion(request):
 	logout(request)
 	return HttpResponseRedirect('/')

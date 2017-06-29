@@ -5,6 +5,13 @@
 	<title>Aparcamientos de Madrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<link href="{% static '1.css' %}"" type="text/css" rel="stylesheet" />
+	<link rel="shortcut icon" href="static/parking_inv.png">
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+           integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"
+           integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
+crossorigin=""></script>
 </head>
 
 <body>
@@ -14,23 +21,27 @@
 		<div class="formulario">
 			{% if request.user.is_authenticated %}
 				<h4>Bienvenido {{user.username}}</h4> 
-				<form action="/mypage">
+				<form action= /{{user.username}}>
 					<input type="submit" value="Mi pagina">
 				</form>		
+				<form action="/{{user.username}}/XML"> 
+					<input type ="submit" value="XML">	
+				</form>
+
 				<form action="/logout">
 					<input type="submit" value="Salir">
-				</form>		
-							
+				</form>	
 			{% else %}
 			<form action="/login" method="POST">
 				{% csrf_token %}
-				Usuario:<br><input type="text" name="usuario"></br>
-				Contraseña:<br><input type="password" name="contraseña"></br>
-				<br><input type="submit" value="Entrar">			
+				Usuario:<input type="text" name="usuario">
+				Contraseña:<input type="password" name="contraseña">
+				<input type="submit" value="Entrar">			
 			</form>
+	
 			{% endif %}
 
-		</div>
+	</div id="titulo">
 		<h1>Aparcamientos de Madrid</h1>
 	</div>
 
@@ -39,8 +50,8 @@
 			<li><a href="/"> <strong>Inicio</strong></a></li>
 			<li><a href="/aparcamientos"> <strong>Aparcamientos</strong></a></li>
 			<li><a href="/accesibles"> <strong>Aparcamientos Accesibles</strong></a></li>
-			<li><a href="/XML"> <strong>XML</strong></a></li>	
-			<li><a href="/about"> <strong>About</strong></a></li>
+			<li><a href="/registro"><strong>Regístrate</strong></a></li>
+			<li><a href="/about"> <strong>About</strong></a></li>			
 			</ul>
 	</div>
 

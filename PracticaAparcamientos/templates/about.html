@@ -1,13 +1,35 @@
 {% extends "index.html" %}
-
 {% block content %}
-	<div id="about"><div class= "content"</div>
+	<div class= "content">
 	<p>
-		Esta web pertenece al proyecto de la asignatura de Sistemas y Aplicaciones Telemáticas del Grado de Sistemas de Telecomunicación, impartido en la Universidad Rey Juan Carlos.
-	</p>
-	<p>
-		Esta realizado por Sergio Gómez León.
+		<br>Esta web pertenece al proyecto de la asignatura de Sistemas y Aplicaciones Telemáticas del Grado de Sistemas de Telecomunicación, impartido en la Universidad Rey Juan Carlos.
+		</br>
+		Esta realizado por <strong>Sergio Gómez León</strong>
 	</p>
 
+	<p>
+		<h2>INFORMACION</h2>
+	</p>
+	<br>Aplicación web que recoge información sobre los aparcamientos de la Ciudad de Madrid. La aplicación descarga la información de los aparcamientos desde el portal de datos abiertos de la Comunidad de Madrid.</br>
+	<p><h2>FUNCIONAMIENTO</h2>	</p>
+	<br>
+	<li>Los usuarios registrados podrán crear su selección de aparcamientos. Para
+ello, dispondrán de una página personal.</li>
+	<li>La selección de aparcamientos en su página personal la realizará cada usuario
+a partir de información sobre aparcamientos ya disponibles en el sitio.</li>
+<li>Cualquier navegador podrá acceder a la interfaz pública del sitio, que ofrecerá
+la página personal de cada usuario</li>
+<li>Cualquier usuario podrá indicar que quiere una vista del sitio que incluya
+sólo los aparcamientos accesibles .</li>
+	<br>
+	<li>  /: Página principal de la práctica. Constará de un listado de aparcamientos
+y otro con enlaces a páginas personales:</li>
+	<li> /usuario: Página personal de cada usuario</li>
+	<li> /aparcamientos: Página con todos los aparcamientos</li>
+	<li> /aparcamientos/id: Página de un aparcamiento de la aplicacion</li>
+	<li> /usuario/xml : Canal XML para los aparcamientos seleccionados por ese usuario</li>
+	<li> /about : Información de la página </li>
+	</br>
+	</br>
 	</div>
 {% endblock %}

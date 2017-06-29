@@ -10,6 +10,10 @@ height: 124px;
 background-color: #FEFEDC;
 background-image: url(picks/2.jpg);
 }
+
+#titulo{
+	display: block;
+}
 .banner{
 float:left;
 width: 400px;
@@ -60,7 +64,7 @@ color:#fff;
 }
 #menu_lateral {
 float: left;
-width: 200px;
+width: 180px;
 height: 800px;
 text-align: left;
 font-size: 1.0em;

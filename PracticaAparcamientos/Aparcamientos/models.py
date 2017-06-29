@@ -19,18 +19,23 @@ class Aparcamiento(models.Model):
 	Longitud		=		models.TextField(default="")
 	Puntuacion		= 		models.IntegerField(default="0")
 	Cantidad 		=		models.IntegerField(default = "0")
+	def __str__(self):
+		return self.Nombre
 
 class ComentarioAparcamiento(models.Model):
 	Usuario			=		models.ForeignKey(User)		
 	Comment			= 	models.TextField(default="")
 	Fecha			=		models.DateField(auto_now_add="True")
 	AparcamientoComentado	=		models.ForeignKey('Aparcamiento')
+	def __str__(self):
+		return str(self.AparcamientoComentado)
 
 class Seleccionado(models.Model):
 	Usuario 	= models.ForeignKey(User)
 	Fecha 		= models.DateField(auto_now_add="True")
 	Elegido 	= models.ForeignKey("Aparcamiento")
-	Favorito 	= models.IntegerField(default="0")
+	def __str__(self):
+		return str(self.Elegido)
 
 class CSS(models.Model):
 	Usuario = models.ForeignKey(User)
